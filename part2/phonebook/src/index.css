@@ -1,0 +1,23 @@
+.success {
+  height: 50px;
+  width: 90vw;
+  border: solid 2px green;
+  color: green;
+  background: rgb(179, 176, 176);
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.2rem;
+  padding-top: 18px;
+}
+
+.danger {
+  height: 50px;
+  width: 90vw;
+  font-weight: 600;
+  border: solid 2px rgb(163, 40, 40);
+  color: rgb(163, 40, 40);
+  background: rgb(179, 176, 176);
+  text-align: center;
+  font-size: 1.2rem;
+  padding-top: 18px;
+}
