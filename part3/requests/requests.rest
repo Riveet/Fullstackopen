@@ -1,0 +1,27 @@
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Greg Roy",
+    "number": "080-153456"
+}
+
+###
+
+DELETE http://localhost:3001/api/persons/61b5ccd1944a9f939b16c401
+
+###
+
+GET http://localhost:3001/api/persons
+
+### 
+
+GET http://localhost:3001/api/persons/61b5ccd1944a9f939b16c401
+
+###
+
+GET http://localhost:3001/info
+
+###
+
+PUT  http://localhost:3001/api/persons/61b5ccd1944a9f939b16c401
