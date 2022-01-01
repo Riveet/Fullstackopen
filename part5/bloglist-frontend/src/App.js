@@ -51,8 +51,8 @@ const App = () => {
     if (confirmDelete) {
       blogService.setToken(user.token)
       const updatedBlogList = blogs.filter((blog) => blog.id !== id)
-      await blogService.deleteBlog(blog)
       setBlogs(updatedBlogList)
+      await blogService.deleteBlog(blog)
     }
   }
 
