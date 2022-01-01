@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 
@@ -36,23 +37,16 @@ const Blog = ({ blog, user, handleUpdate, deleteBlog }) => {
               Like
             </button>
           </p>
-          <p>{blog.user.name}</p>
-          {blog.user.id === user.userId && (
-            <button onClick={() => deleteBlog(blog)} className='btn'>
-              Remove
-            </button>
-          )}
+          <p>{blog.user ? blog.user.name : null}</p>
+          {blog.user
+            ? blog.user.id === user.userId && (
+                <button onClick={() => deleteBlog(blog)} className='btn'>
+                  Remove
+                </button>
+              )
+            : null}
         </div>
       ) : null}
     </div>
   )
-}
-
-export default Blog
-
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  user: PropTypes.object.isRequired,
-  handleUpdate: PropTypes.func.isRequired,
-  deleteBlog: PropTypes.func.isRequired,
 }
