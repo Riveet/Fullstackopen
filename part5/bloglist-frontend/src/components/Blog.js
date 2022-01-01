@@ -50,3 +50,12 @@ const Blog = ({ blog, user, handleUpdate, deleteBlog }) => {
     </div>
   )
 }
+
+export default Blog
+
+Blog.propTypes = {
+  blog: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  handleUpdate: PropTypes.func.isRequired,
+  deleteBlog: PropTypes.func.isRequired,
+}

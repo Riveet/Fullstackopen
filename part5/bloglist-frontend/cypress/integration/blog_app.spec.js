@@ -1,4 +1,4 @@
-const { func } = require('prop-types')
+/* eslint-disable no-undef */
 
 describe('Blog app', function () {
   beforeEach(function () {
@@ -136,20 +136,20 @@ describe('Blog app', function () {
   })
 })
 
-it('Only user who added the blog should be able to delete it', function () {
-  const user = {
-    name: 'secondUser',
-    username: 'secondUser',
-    password: 'usertests',
-  }
-  cy.request('POST', 'http://localhost:3001/api/users/', user)
+// it('Only user who added the blog should be able to delete it', function () {
+//   const user = {
+//     name: 'secondUser',
+//     username: 'secondUser',
+//     password: 'usertests',
+//   }
+//   cy.request('POST', 'http://localhost:3001/api/users/', user)
 
-  cy.login({ username: 'secondUser', password: 'usertests' })
+//   cy.login({ username: 'secondUser', password: 'usertests' })
 
-  cy.contains('The Big and the Small Tim Urban')
-    .parent()
-    .contains('view')
-    .click()
+//   cy.contains('The Big and the Small Tim Urban')
+//     .parent()
+//     .contains('view')
+//     .click()
 
-  cy.should('not.contain', 'Remove')
-})
+//   cy.should('not.contain', 'Remove')
+// })
