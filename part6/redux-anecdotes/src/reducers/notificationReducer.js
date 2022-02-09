@@ -20,4 +20,20 @@ export const clearNotification = () => {
     type: 'CLEAR_NOTIFICATION',
   }
 }
+
+export const setNotification = (notification, time) => {
+  const timeInMs = time * 1000
+  return async (dispatch) => {
+    dispatch({
+      type: 'SHOW_NOTIFICATION',
+      notification,
+    })
+    setTimeout(() => {
+      dispatch({
+        type: 'CLEAR_NOTIFICATION',
+      })
+    }, timeInMs)
+  }
+}
+
 export default notificationReducer
