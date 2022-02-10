@@ -1,15 +1,14 @@
-import { useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
 import { setNotification } from '../reducers/notificationReducer'
 
-const AnectodeForm = () => {
-  const dispatch = useDispatch()
+const AnectodeForm = ({ createAnecdote, setNotification }) => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     const content = e.target.anecdote.value
     e.target.anecdote.value = ''
-    dispatch(createAnecdote(content))
-    dispatch(setNotification(`Added '${content}' to the list`, 3))
+    createAnecdote(content)
+    setNotification(`Added '${content}' to the list`, 3)
   }
   return (
     <div>
@@ -24,4 +23,4 @@ const AnectodeForm = () => {
   )
 }
 
-export default AnectodeForm
+export default connect(null, { createAnecdote, setNotification })(AnectodeForm)

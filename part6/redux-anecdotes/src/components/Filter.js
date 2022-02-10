@@ -1,17 +1,14 @@
 import { useState } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { connect } from 'react-redux'
 import { filter } from '../reducers/filterReducer'
 
-const Filter = () => {
-  const anecdotes = useSelector((state) => state.anecdotes)
-  const dispatch = useDispatch()
-
+const Filter = ({ filter, anecdotes }) => {
   const [value, setValue] = useState('')
 
   const handleChange = (event) => {
     setValue(event.target.value)
     setTimeout(() => {
-      dispatch(filter({ value, anecdotes }))
+      filter({ value, anecdotes })
     }, 500)
   }
 
@@ -26,4 +23,10 @@ const Filter = () => {
   )
 }
 
-export default Filter
+const mapStateToProps = (state) => {
+  return {
+    anecdotes: state.anecdotes,
+  }
+}
+
+export default connect(mapStateToProps, { filter })(Filter)

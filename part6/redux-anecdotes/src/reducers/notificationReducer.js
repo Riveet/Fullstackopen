@@ -21,14 +21,17 @@ export const clearNotification = () => {
   }
 }
 
+let id = 0
+
 export const setNotification = (notification, time) => {
   const timeInMs = time * 1000
+  clearTimeout(id)
   return async (dispatch) => {
     dispatch({
       type: 'SHOW_NOTIFICATION',
       notification,
     })
-    setTimeout(() => {
+    id = setTimeout(() => {
       dispatch({
         type: 'CLEAR_NOTIFICATION',
       })
