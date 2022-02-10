@@ -2,14 +2,16 @@ import { useEffect } from 'react'
 import AnectodeForm from './components/AnectodeForm'
 import AnecdoteList from './components/AnecdoteList'
 import Notification from './components/Notification'
-import { connect } from 'react-redux'
+import { useDispatch, connect } from 'react-redux'
 import Filter from './components/Filter'
 import { initAnecdotes } from './reducers/anecdoteReducer'
 
-const App = ({ notification, initAnecdotes }) => {
+const App = ({ notification }) => {
+  const dispatch = useDispatch()
+
   useEffect(() => {
-    initAnecdotes()
-  })
+    dispatch(initAnecdotes())
+  }, [dispatch])
 
   return (
     <div>
@@ -28,4 +30,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps, { initAnecdotes })(App)
+export default connect(mapStateToProps)(App)
