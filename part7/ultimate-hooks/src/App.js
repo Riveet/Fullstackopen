@@ -30,7 +30,7 @@ const useResource = (baseUrl) => {
     axios
       .post(baseUrl, resource)
       .then(({ data }) => {
-        resources.concat(data)
+        setResources(resources.concat(data))
       })
       .catch((err) => console.log(err))
   }
