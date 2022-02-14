@@ -20,6 +20,7 @@ import {
   clearNotification,
   showNotification,
 } from './reducers/notificationReducer'
+import styled from 'styled-components'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -44,7 +45,7 @@ const App = () => {
 
     setTimeout(() => {
       dispatch(clearNotification())
-    }, 5000)
+    }, 2000)
   }
 
   const blogList = useSelector((state) => state.blogListReducer)
@@ -71,7 +72,10 @@ const App = () => {
     try {
       dispatch(newBlog(blog))
       blogFormRef.current.toggleVisibility()
-      notifyWith(`a new blog '${newBlog.title}' by ${newBlog.author} added!`)
+      const newBlogIndex = blogList.length - 1
+      notifyWith(
+        `a new blog '${blogList[newBlogIndex].title}' by ${blogList[newBlogIndex].author} added!`
+      )
     } catch (exception) {
       console.log(exception)
     }
@@ -99,100 +103,203 @@ const App = () => {
 
   if (!blogUser) {
     return (
-      <div>
-        <h2>login to application</h2>
+      <Wrapper>
+        <h2 className='login-header'>login to application</h2>
 
         <Notification notification={notification} />
 
-        <form onSubmit={handleLogin}>
-          <div>
-            username
+        <form onSubmit={handleLogin} className='form'>
+          <div className='form-row'>
             <input
               id='username'
               value={username}
               onChange={({ target }) => setUsername(target.value)}
+              className='form-input'
+              placeholder='username'
             />
           </div>
-          <div>
-            password
+          <div className='form-row'>
             <input
               id='password'
               value={password}
               onChange={({ target }) => setPassword(target.value)}
+              className='form-input'
+              placeholder='password'
             />
           </div>
           <button id='login'>login</button>
         </form>
-      </div>
+      </Wrapper>
     )
   }
 
   const byLikes = (b1, b2) => b2.likes - b1.likes
 
-  const blogStyle = {
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
   return (
     <BrowserRouter>
-      <div>
-        <h2>blogs</h2>
-        <div>
-          <Link to='/'>Blogs</Link> {'  '} <Link to='/users'>Users</Link>
+      <Wrapper>
+        <div className='app-header'>
+          <div className='nav'>
+            <Link to='/' className='nav-links'>
+              Blogs
+            </Link>{' '}
+            {'  '}{' '}
+            <Link to='/users' className='nav-links'>
+              Users
+            </Link>
+          </div>
+          <h2 className='app-title'>Blogs</h2>
+          <p className='login'>
+            {blogUser.name} logged in{' '}
+            <button onClick={() => dispatch(logout())}>logout</button>
+          </p>
         </div>
-      </div>
 
-      <Notification notification={notification} />
+        <Notification notification={notification} />
 
-      <p>
-        {blogUser.name} logged in{' '}
-        <button onClick={() => dispatch(logout())}>logout</button>
-      </p>
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <>
-              <Togglable buttonLabel='create new blog' ref={blogFormRef}>
-                <NewBlog createBlog={createBlog} />
-              </Togglable>
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <>
+                <Togglable
+                  buttonLabel='create new blog'
+                  ref={blogFormRef}
+                  className='create-btn'
+                >
+                  <NewBlog createBlog={createBlog} />
+                </Togglable>
 
-              {blogList.sort(byLikes).map((blog) => {
-                return (
-                  <Link
-                    to={`/blogs/${blog.id}`}
-                    key={blog.id}
-                    style={blogStyle}
-                  >
-                    {blog.title}
-                  </Link>
-                )
-              })}
-            </>
-          }
-        ></Route>
+                <div className='blog-list'>
+                  {blogList.sort(byLikes).map((blog) => {
+                    return (
+                      <Link
+                        to={`/blogs/${blog.id}`}
+                        key={blog.id}
+                        className='blog'
+                      >
+                        {blog.title}
+                      </Link>
+                    )
+                  })}
+                </div>
+              </>
+            }
+          ></Route>
 
-        <Route element={<Users />} path='/users' />
-        <Route element={<User />} path='/users/:id' />
-        <Route
-          element={blogList.map((blog) => {
-            return (
+          <Route element={<Users />} path='/users' />
+          <Route element={<User />} path='/users/:id' />
+          <Route
+            element={
               <Blog
                 blogList={blogList}
                 handleLike={handleLike}
                 handleRemove={handleRemove}
-                own={blogUser.username === blog.user.username}
+                blogUser={blogUser}
               />
-            )
-          })}
-          path='/blogs/:id'
-        />
-      </Routes>
+            }
+            path='/blogs/:id'
+          />
+        </Routes>
+      </Wrapper>
     </BrowserRouter>
   )
 }
 
 export default App
+
+const Wrapper = styled.div`
+  .login-header {
+    text-transform: capitalize;
+    text-align: center;
+    margin: 10px auto;
+  }
+  .app-title {
+    text-align: center;
+  }
+
+  button {
+    cursor: pointer;
+    color: black;
+    background: #558564;
+    border: transparent;
+    border-radius: 0.25rem;
+    letter-spacing: 1px;
+    padding: 0.375rem 0.75rem;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    transition: var(--transition);
+    text-transform: capitalize;
+    display: inline-block;
+    margin: 5px;
+  }
+
+  button:hover {
+    opacity: 0.7;
+  }
+
+  .login {
+    font-size: 0.9rem;
+
+    button {
+      font-size: 0.6rem;
+      padding: 3px 5px;
+      border: none;
+      border-radius: 5px;
+      margin: 0;
+      margin-left: 2px;
+    }
+  }
+
+  .nav-links {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: ease-in-out 500ms;
+  }
+
+  .nav-links:hover {
+    text-decoration: underline;
+  }
+
+  .app-header {
+    margin-bottom: 50px;
+    background-color: #abd1b5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 40px;
+    padding: 10px;
+  }
+
+  .blog {
+    margin-top: 5px;
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+    border: black 1px solid;
+    border-radius: 5px;
+    padding: 10px 15px;
+    transition: ease-in-out 500ms;
+
+    :hover {
+      text-decoration: underline;
+    }
+  }
+
+  .blog-list {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  @media screen and (min-width: 992px) {
+    .blog-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 10px;
+    }
+  }
+`

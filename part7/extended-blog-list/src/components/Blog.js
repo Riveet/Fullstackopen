@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useParams } from 'react-router-dom'
 import { createComment, initComments } from '../reducers/commentsReducer'
 import { useDispatch, useSelector } from 'react-redux'
+import styled from 'styled-components'
 
-const Blog = ({ blogList, handleLike, handleRemove, own }) => {
+const Blog = ({ blogList, handleLike, handleRemove, blogUser }) => {
   const [value, setValue] = useState('')
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const { id } = useParams()
 
@@ -34,33 +28,44 @@ const Blog = ({ blogList, handleLike, handleRemove, own }) => {
     dispatch(createComment(id, comment))
   }
 
+  const own = blogUser.username === blog.user.username
+
   if (!blog || !comments) {
     return <p>Not Found...</p>
   }
 
+  const deleteBlog = (id) => {
+    handleRemove(id)
+    navigate('/')
+  }
+
   return (
-    <div style={blogStyle} className='blog'>
+    <Wrapper>
       <h3>
         <i>{blog.title}</i> by {blog.author}{' '}
       </h3>
 
       <div>
-        <div>{blog.url}</div>
-        <div>
+        <p>{blog.url}</p>
+        <p>
           likes {blog.likes}
           <button onClick={() => handleLike(blog.id)}>like</button>
-        </div>
+        </p>
         <div>{blog.user.name}</div>
-        {own && <button onClick={() => handleRemove(blog.id)}>remove</button>}
+        {own && <button onClick={() => deleteBlog(blog.id)}>remove</button>}
       </div>
-      <Link to='/'>Go back</Link>
-      <div>
+      <Link to='/' className='link'>
+        Go back
+      </Link>
+      <div className='comments'>
         <h4>Comments</h4>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className='form'>
           <input
             type='text'
             value={value}
             onChange={(e) => setValue(e.target.value)}
+            className='form-input'
+            placeholder='comment'
           />
           <button>Add Comment</button>
         </form>
@@ -71,7 +76,7 @@ const Blog = ({ blogList, handleLike, handleRemove, own }) => {
           })}
         </ul>
       </div>
-    </div>
+    </Wrapper>
   )
 }
 
@@ -79,7 +84,48 @@ Blog.propTypes = {
   blogList: PropTypes.array.isRequired,
   handleLike: PropTypes.func.isRequired,
   handleRemove: PropTypes.func.isRequired,
-  own: PropTypes.bool.isRequired,
+  blogUser: PropTypes.object.isRequired,
 }
 
 export default Blog
+
+const Wrapper = styled.div`
+  margin: 5px 15px;
+  width: 90vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  h3 {
+    margin-bottom: 10px;
+  }
+
+  p {
+    margin-bottom: 5px;
+  }
+
+  .comments {
+    margin-top: 20px;
+  }
+
+  .link {
+    cursor: pointer;
+    margin-top: 5px;
+    text-decoration: none;
+    transition: ease-in-out 500ms;
+    color: black;
+
+    :hover {
+      text-decoration: underline;
+    }
+  }
+
+  @media screen and (min-width: 992px) {
+    margin: 5px auto;
+
+    form {
+      max-width: 660px;
+      margin: 10px 0;
+    }
+  }
+`

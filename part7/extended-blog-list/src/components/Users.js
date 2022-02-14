@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import { initUsers } from '../reducers/fetchUsersReducer'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 
 const Users = () => {
   const dispatch = useDispatch()
@@ -17,7 +18,7 @@ const Users = () => {
   }
 
   return (
-    <table>
+    <Wrapper>
       <thead>
         <tr>
           <th></th>
@@ -30,15 +31,31 @@ const Users = () => {
           return (
             <tr key={id}>
               <td>
-                <Link to={`/users/${id}`}>{name}</Link>
+                <Link to={`/users/${id}`} className='link'>
+                  {name}
+                </Link>
               </td>
               <td>{blogs.length}</td>
             </tr>
           )
         })}
       </tbody>
-    </table>
+    </Wrapper>
   )
 }
 
 export default Users
+
+const Wrapper = styled.table`
+  margin-left: 10px;
+  .link {
+    text-decoration: none;
+    transition: ease-in-out 500ms;
+    margin-right: 10px;
+    color: black;
+
+    :hover {
+      text-decoration: underline;
+    }
+  }
+`

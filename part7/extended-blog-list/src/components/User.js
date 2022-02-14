@@ -1,5 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import styled from 'styled-components'
 
 const User = () => {
   const users = useSelector((state) => state.fetchUsersReducer)
@@ -12,7 +13,7 @@ const User = () => {
   }
 
   return (
-    <div>
+    <Wrapper>
       <h3>{user.name}</h3>
       <h5>Added blogs:</h5>
       <ul>
@@ -21,8 +22,20 @@ const User = () => {
           return <li key={id}>{title}</li>
         })}
       </ul>
-    </div>
+    </Wrapper>
   )
 }
 
 export default User
+
+const Wrapper = styled.div`
+  margin-left: 20px;
+
+  h3 {
+    margin-bottom: 10px;
+  }
+
+  h5 {
+    margin-bottom: 5px;
+  }
+`
