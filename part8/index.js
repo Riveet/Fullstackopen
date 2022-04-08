@@ -182,11 +182,11 @@ const resolvers = {
   Mutation: {
     addBook: async (root, args, context) => {
       const book = new Book({ ...args })
-      const currentUser = context.currentUser
+      // const currentUser = context.currentUser
 
-      if (!currentUser) {
-        throw new AuthenticationError('Not authenticated')
-      }
+      // if (!currentUser) {
+      //   throw new AuthenticationError('Not authenticated')
+      // }
 
       try {
         await book.save()
@@ -197,11 +197,11 @@ const resolvers = {
       }
     },
     editAuthor: async (root, args, context) => {
-      const currentUser = context.currentUser
+      // const currentUser = context.currentUser
 
-      if (!currentUser) {
-        throw new AuthenticationError('Not authenticated')
-      }
+      // if (!currentUser) {
+      //   throw new AuthenticationError('Not authenticated')
+      // }
 
       try {
         return Author.findByIdAndUpdate(
@@ -258,14 +258,14 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async ({ req }) => {
-    const auth = req ? req.headers.authorization : null
-    if (auth && auth.toLowerCase().startsWith('bearer ')) {
-      const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
-      const currentUser = await User.findById(decodedToken.id)
-      return { currentUser }
-    }
-  },
+  // context: async ({ req }) => {
+  //   const auth = req ? req.headers.authorization : null
+  //   if (auth && auth.toLowerCase().startsWith('bearer ')) {
+  //     const decodedToken = jwt.verify(auth.substring(7), JWT_SECRET)
+  //     const currentUser = await User.findById(decodedToken.id)
+  //     return { currentUser }
+  //   }
+  // },
 })
 
 server.listen().then(({ url }) => {
